@@ -1,0 +1,249 @@
+{
+  "env": "fund_finance",
+  "model_provider": "fireworks",
+  "model": "qwen3-coder-480b-a35b-instruct",
+  "num_trials": 1,
+  "temperature": 1,
+  "interface_num": 2,
+  "task": {
+    "user_id": "17",
+    "instruction": "You are Jacqueline Sutton (jsutton@finance.com), a manager. You want to update the quantity of the holding in the 'Marshall LLC Balanced Fund' from 9947.3718 to 6031.1705.",
+    "actions": [
+      {
+        "name": "search_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "jsutton@finance.com"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2022-12-06T01:19:16",
+              "email": "jsutton@finance.com",
+              "first_name": "Jacqueline",
+              "last_name": "Sutton",
+              "role": "fund_manager",
+              "status": "active",
+              "timezone": "Asia/Tokyo",
+              "updated_at": "2025-07-09T07:22:15",
+              "user_id": "17"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "check_approval",
+        "arguments": {
+          "action": "portfolio_holding_management",
+          "requester_email": "jsutton@finance.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "message": "Role 'fund_manager' is directly authorized for action 'portfolio_holding_management'"
+        }
+      },
+      {
+        "name": "search_fund_entities",
+        "arguments": {
+          "entity_type": "funds",
+          "filters": {
+            "name": "Marshall LLC Balanced Fund"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "funds",
+          "results": [
+            {
+              "created_at": "2023-02-10T19:59:25",
+              "fund_id": "24",
+              "fund_type": "private_equity_funds",
+              "manager_id": "112",
+              "name": "Marshall LLC Balanced Fund",
+              "size": 142076468.18,
+              "status": "closed",
+              "updated_at": "2025-07-05T22:18:00"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_portfolio_entities",
+        "arguments": {
+          "entity_type": "portfolio_holdings",
+          "filters": {
+            "fund_id": "24",
+            "quantity": 9947.3718
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "portfolio_holdings",
+          "results": [
+            {
+              "cost_basis": 160.8784,
+              "created_at": "2025-04-11T07:06:20",
+              "fund_id": "24",
+              "holding_id": "50",
+              "portfolio_id": "7",
+              "quantity": 9947.3718
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "handle_portfolio_holdings",
+        "arguments": {
+          "action": "update",
+          "holding_data": {
+            "quantity": 6031.1705,
+            "fund_manager_approval": "true"
+          },
+          "holding_id": "50"
+        },
+        "output": {
+          "action": "update",
+          "holding_data": {
+            "cost_basis": 160.8784,
+            "created_at": "2025-04-11T07:06:20",
+            "fund_id": "24",
+            "holding_id": "50",
+            "portfolio_id": "7",
+            "quantity": 6031.1705
+          },
+          "holding_id": "50",
+          "message": "Portfolio holding 50 updated successfully",
+          "success": true
+        }
+      },
+      {
+        "name": "add_new_audit_trail",
+        "arguments": {
+          "action": "update",
+          "field_name": "quantity",
+          "new_value": 6031.1705,
+          "old_value": 9947.3718,
+          "reference_id": "50",
+          "reference_type": "holding"
+        },
+        "output": {
+          "action": "update",
+          "audit_trail_id": "3501",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": "quantity",
+          "new_value": 6031.1705,
+          "old_value": 9947.3718,
+          "reference_id": "50",
+          "reference_type": "holding"
+        }
+      }
+    ],
+    "outputs": ["3501", "50"],
+    "edges": [
+      {
+        "from": "instruction",
+        "to": "search_user_entities",
+        "connection": {
+          "output": "entity_type, email",
+          "input": "entity_type, filters.email"
+        }
+      },
+      {
+        "from": "search_user_entities",
+        "to": "check_approval",
+        "connection": {
+          "output": "results[0].email",
+          "input": "requester_email"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "check_approval",
+        "connection": {
+          "output": "action",
+          "input": "action"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_fund_entities",
+        "connection": {
+          "output": "entity_type, name",
+          "input": "entity_type, filters.name"
+        }
+      },
+      {
+        "from": "search_fund_entities",
+        "to": "search_portfolio_entities",
+        "connection": {
+          "output": "results[0].fund_id",
+          "input": "filters.fund_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "search_portfolio_entities",
+        "connection": {
+          "output": "entity_type, quantity",
+          "input": "entity_type, filters.quantity"
+        }
+      },
+      {
+        "from": "search_portfolio_entities",
+        "to": "handle_portfolio_holdings",
+        "connection": {
+          "output": "results[0].holding_id",
+          "input": "holding_id"
+        }
+      },
+      {
+        "from": "check_approval",
+        "to": "handle_portfolio_holdings",
+        "connection": {
+          "output": "approval_valid",
+          "input": "holding_data.fund_manager_approval"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "handle_portfolio_holdings",
+        "connection": {
+          "output": "action, holding_data.quantity",
+          "input": "action, holding_data.quantity"
+        }
+      },
+      {
+        "from": "handle_portfolio_holdings",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "holding_data.quantity, holding_id, action",
+          "input": "new_value, reference_id, action"
+        }
+      },
+      {
+        "from": "search_portfolio_entities",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "results[0].quantity",
+          "input": "old_value"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "field_name, reference_type",
+          "input": "field_name, reference_type"
+        }
+      }
+    ],
+    "num_edges": 12
+  }
+}
