@@ -14,7 +14,8 @@
         "arguments": {
           "entity_type": "users",
           "filters": {
-            "email": "danielle.johnson@investment.com"
+            "email": "danielle.johnson@investment.com",
+            "role": "compliance_officer"
           }
         },
         "output": {
@@ -170,7 +171,7 @@
         "from": "instruction",
         "to": "search_user_entities",
         "connection": {
-          "output": "entity_type, filters.email",
+          "output": "entity_type, email",
           "input": "entity_type, filters.email"
         }
       },
