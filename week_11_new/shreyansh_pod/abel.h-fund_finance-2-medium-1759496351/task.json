@@ -14,7 +14,8 @@
         "arguments": {
           "entity_type": "users",
           "filters": {
-            "email": "jsutton@finance.com"
+            "email": "jsutton@finance.com",
+            "role": "fund_manager"
           }
         },
         "output": {
