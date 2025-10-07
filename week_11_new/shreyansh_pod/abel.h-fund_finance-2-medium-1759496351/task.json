@@ -7,7 +7,7 @@
   "interface_num": 2,
   "task": {
     "user_id": "17",
-    "instruction": "You are Jacqueline Sutton (jsutton@finance.com), a manager. You want to update the quantity of the holding in the 'Marshall LLC Balanced Fund' from 9947.3718 to 6031.1705.",
+    "instruction": "You are Jacqueline Sutton (jsutton@finance.com), a fund manager. You want to update the quantity of the holding in the 'Marshall LLC Balanced Fund' from 9947.3718 to 6031.1705.",
     "actions": [
       {
         "name": "search_user_entities",
@@ -156,19 +156,11 @@
         }
       },
       {
-        "from": "search_user_entities",
-        "to": "check_approval",
-        "connection": {
-          "output": "results[0].email",
-          "input": "requester_email"
-        }
-      },
-      {
         "from": "instruction",
         "to": "check_approval",
         "connection": {
-          "output": "action",
-          "input": "action"
+          "output": "email",
+          "input": "requester_email"
         }
       },
       {
@@ -215,8 +207,8 @@
         "from": "instruction",
         "to": "handle_portfolio_holdings",
         "connection": {
-          "output": "action, holding_data.quantity",
-          "input": "action, holding_data.quantity"
+          "output": "action, quantity",
+          "input": "action, quantity"
         }
       },
       {
@@ -244,6 +236,6 @@
         }
       }
     ],
-    "num_edges": 12
+    "num_edges": 11
   }
 }
