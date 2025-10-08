@@ -209,7 +209,7 @@
         "to": "handle_portfolio_holdings",
         "connection": {
           "output": "action, quantity",
-          "input": "action, quantity"
+          "input": "action, holding_data.quantity"
         }
       },
       {
