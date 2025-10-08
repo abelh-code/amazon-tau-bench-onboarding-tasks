@@ -7,7 +7,7 @@
   "interface_num": 2,
   "task": {
     "user_id": "1",
-    "instruction": "You are Danielle Johnson (danielle.johnson@investment.com), a compliance officer. Onboard a new investor called 'Nexora Technologies' with contact email 'contact@nexoratech.com', accredited status, and a source of funds from retained earnings. Once you onboard them, create a new commitment for them for USD 14000.77 in the pension fund 'Graham-Johnson Income Fund' that matches his fulfilled commitment on the 10th Jan 2025.",
+    "instruction": "You are Danielle Johnson (danielle.johnson@investment.com), a compliance officer. Onboard a new investor called 'Nexora Technologies' with contact email 'contact@nexoratech.com', accredited status, and a source of funds from retained earnings. Once you onboard them, create a new commitment for them for USD 14000.77 in the pension fund 'Graham-Johnson Income Fund' that matches their fulfilled commitment on the 10th Jan 2025. After that, send an alert to the fund manager notifying them about this.",
     "actions": [
       {
         "name": "search_user_entities",
@@ -163,6 +163,79 @@
           "reference_id": "2001",
           "reference_type": "commitment"
         }
+      },
+      {
+        "name": "search_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "user_id": "20"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2022-11-12T00:45:38",
+              "email": "gabriellecameron@hotmail.com",
+              "first_name": "Gabrielle",
+              "last_name": "Cameron",
+              "role": "fund_manager",
+              "status": "active",
+              "timezone": "Europe/London",
+              "updated_at": "2023-11-02T20:17:29",
+              "user_id": "20"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "handle_notifications",
+        "arguments": {
+          "action": "create",
+          "notification_data": {
+            "email": "gabriellecameron@hotmail.com",
+            "type": "alert",
+            "class": "commitments",
+            "reference_id": 2001
+          }
+        },
+        "output": {
+          "action": "create",
+          "message": "Notification 1501 created successfully for gabriellecameron@hotmail.com",
+          "notification_data": {
+            "class": "commitments",
+            "created_at": "2025-10-01T12:00:00",
+            "email": "gabriellecameron@hotmail.com",
+            "notification_id": "1501",
+            "reference_id": "2001",
+            "sent_at": null,
+            "status": "pending",
+            "type": "alert"
+          },
+          "notification_id": "1501",
+          "success": true
+        }
+      },
+      {
+        "name": "add_new_audit_trail",
+        "arguments": {
+          "action": "create",
+          "reference_id": "1501",
+          "reference_type": "notification"
+        },
+        "output": {
+          "action": "create",
+          "audit_trail_id": "3503",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": null,
+          "new_value": null,
+          "old_value": null,
+          "reference_id": "1501",
+          "reference_type": "notification"
+        }
       }
     ],
     "outputs": ["3501", "176"],
@@ -176,19 +249,11 @@
         }
       },
       {
-        "from": "search_user_entities",
-        "to": "check_approval",
-        "connection": {
-          "output": "output.results[0].email",
-          "input": "requester_email"
-        }
-      },
-      {
         "from": "instruction",
         "to": "check_approval",
         "connection": {
-          "output": "action",
-          "input": "action"
+          "output": "action, email",
+          "input": "action, requester_email"
         }
       },
       {
@@ -235,7 +300,7 @@
         "from": "instruction",
         "to": "search_fund_entities",
         "connection": {
-          "output": "entity_type, filters.name",
+          "output": "entity_type, name",
           "input": "entity_type, filters.name"
         }
       },
@@ -267,11 +332,43 @@
         "from": "add_commitment",
         "to": "add_new_audit_trail",
         "connection": {
-          "output": "output.commitment_id",
+          "output": "commitment_id",
+          "input": "reference_id"
+        }
+      },
+      {
+        "from": "search_user_entities",
+        "to": "handle_notifications",
+        "connection": {
+          "output": "results[0].email",
+          "input": "notification_data.email"
+        }
+      },
+      {
+        "from": "add_commitment",
+        "to": "handle_notifications",
+        "connection": {
+          "output": "commitment_id",
+          "input": "notification_data.reference_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "handle_notifications",
+        "connection": {
+          "output": "action, type, class",
+          "input": "action, notification_data.type, notification_data.class"
+        }
+      },
+      {
+        "from": "handle_notifications",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "notification_id",
           "input": "reference_id"
         }
       }
     ],
-    "num_edges": 13
+    "num_edges": 16
   }
 }
