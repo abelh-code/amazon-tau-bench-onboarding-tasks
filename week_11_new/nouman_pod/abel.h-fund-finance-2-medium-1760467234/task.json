@@ -1,0 +1,191 @@
+{
+  "env": "fund_finance",
+  "model_provider": "fireworks",
+  "model": "qwen3-coder-480b-a35b-instruct",
+  "num_trials": 3,
+  "temperature": 1,
+  "interface_num": 2,
+  "task": {
+    "user_id": "123",
+    "instruction": "You are Jennifer Cruz (jennifercruz286@gmail.com), a fund manager working with Stanley Mercado (smercado@hotmail.com), a compliance officer. You want to create a new private equity fund 'Hacksaw LLC Income Fund' with the initial size CAD 344577855.33 and manage it yourself.",
+    "actions": [
+      {
+        "name": "search_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "jennifercruz286@gmail.com",
+            "role": "fund_manager"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2024-04-28T23:22:53",
+              "email": "jennifercruz286@gmail.com",
+              "first_name": "Jennifer",
+              "last_name": "Cruz",
+              "role": "fund_manager",
+              "status": "active",
+              "timezone": "America/Los_Angeles",
+              "updated_at": "2024-11-04T11:34:51",
+              "user_id": "123"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "search_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "smercado@hotmail.com",
+            "role": "compliance_officer"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2025-01-27T09:48:34",
+              "email": "smercado@hotmail.com",
+              "first_name": "Stanley",
+              "last_name": "Mercado",
+              "role": "compliance_officer",
+              "status": "active",
+              "timezone": "America/New_York",
+              "updated_at": "2025-04-12T22:04:37",
+              "user_id": "122"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "check_approval",
+        "arguments": {
+          "action": "fund_management_setup",
+          "requester_email": "jennifercruz286@gmail.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "message": "Role 'fund_manager' is directly authorized for action 'fund_management_setup'"
+        }
+      },
+      {
+        "name": "handle_fund",
+        "arguments": {
+          "action": "create",
+          "fund_data": {
+            "name": "Hacksaw LLC Income Fund",
+            "fund_type": "private_equity_funds",
+            "size": 344577855.33,
+            "manager_id": "123",
+            "base_currency": "Canadian Dollars",
+            "fund_manager_approval": true,
+            "compliance_officer_approval": true
+          }
+        },
+        "output": {
+          "action": "create",
+          "fund_data": {
+            "base_currency": "Canadian Dollars",
+            "created_at": "2025-10-01T12:00:00",
+            "fund_id": "101",
+            "fund_type": "private_equity_funds",
+            "manager_id": "123",
+            "name": "Hacksaw LLC Income Fund",
+            "size": 344577855.33,
+            "status": "open",
+            "updated_at": "2025-10-01T12:00:00"
+          },
+          "fund_id": "101",
+          "message": "Fund 101 created successfully with name 'Hacksaw LLC Income Fund'",
+          "success": true
+        }
+      },
+      {
+        "name": "add_new_audit_trail",
+        "arguments": {
+          "action": "create",
+          "reference_id": "101",
+          "reference_type": "fund"
+        },
+        "output": {
+          "action": "create",
+          "audit_trail_id": "3501",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": null,
+          "new_value": null,
+          "old_value": null,
+          "reference_id": "101",
+          "reference_type": "fund"
+        }
+      }
+    ],
+    "outputs": ["123", "101"],
+    "edges": [
+      {
+        "from": "instruction",
+        "to": "search_user_entities",
+        "connection": {
+          "output": "entity_type, email, role",
+          "input": "entity_type, filters.email, filters.role"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "check_approval",
+        "connection": {
+          "output": "action, email",
+          "input": "action, requester_email"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "handle_fund",
+        "connection": {
+          "output": "action, name, fund_type, size, base_currency, compliance_officer_approval",
+          "input": "action, fund_data.name, fund_data.fund_type, fund_data.size, fund_data.base_currency, fund_data.compliance_officer_approval"
+        }
+      },
+      {
+        "from": "search_user_entities",
+        "to": "handle_fund",
+        "connection": {
+          "output": "results[0].user_id",
+          "input": "fund_data.manager_id"
+        }
+      },
+      {
+        "from": "check_approval",
+        "to": "handle_fund",
+        "connection": {
+          "output": "approval_valid",
+          "input": "fund_data.fund_manager_approval"
+        }
+      },
+      {
+        "from": "handle_fund",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "fund_id",
+          "input": "reference_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "add_new_audit_trail",
+        "connection": {
+          "output": "action, reference_type",
+          "input": "action, reference_type"
+        }
+      }
+    ],
+    "num_edges": 7
+  }
+}
