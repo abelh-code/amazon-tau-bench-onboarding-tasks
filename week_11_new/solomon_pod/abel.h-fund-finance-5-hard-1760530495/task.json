@@ -1,0 +1,320 @@
+{
+  "env": "fund_finance",
+  "model_provider": "fireworks",
+  "model": "qwen3-coder-480b-a35b-instruct",
+  "num_trials": 3,
+  "temperature": 1,
+  "interface_num": 5,
+  "task": {
+    "user_id": "114",
+    "instruction": "You are Richard Bass (richard.bass@yahoo.com), a fund manager. You are working with Jerry Robinson (jerryrobinson272@hotmail.com), a complicance officer. You want to onboard a newly accredited investor 'Summit Ridge Ventures Inc' in 450 Bay Street, Suite 2300, Toronto, Canada with contact email investor.relations@summitridgevc.com and a source of funds through shareholder capital today, October 14, 2025. They would like to subscribe USD 1415926.75 to 'Rogers-Hobbs Strategic Fund' on the same day of their onboarding. Perform this subscription request for them. Your compliance officer has provided the necessary authorization to perform these operations.",
+    "actions": [
+      {
+        "name": "get_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "richard.bass@yahoo.com",
+            "role": "fund_manager"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2023-12-02T04:31:19",
+              "email": "richard.bass@yahoo.com",
+              "first_name": "Richard",
+              "last_name": "Bass",
+              "role": "fund_manager",
+              "status": "active",
+              "timezone": "America/Chicago",
+              "updated_at": "2024-07-12T00:58:52",
+              "user_id": "114"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "get_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "jerryrobinson272@hotmail.com",
+            "role": "compliance_officer"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2022-12-05T10:03:24",
+              "email": "jerryrobinson272@hotmail.com",
+              "first_name": "Jerry",
+              "last_name": "Robinson",
+              "role": "compliance_officer",
+              "status": "active",
+              "timezone": "America/Los_Angeles",
+              "updated_at": "2025-08-11T19:16:49",
+              "user_id": "47"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "authorization_check",
+        "arguments": {
+          "action": "investor_onboarding",
+          "requester_email": "richard.bass@yahoo.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "approved_by": "compliance_officer"
+        }
+      },
+      {
+        "name": "generate_investor",
+        "arguments": {
+          "accreditation_status": "accredited",
+          "compliance_officer_approval": true,
+          "contact_email": "investor.relations@summitridgevc.com",
+          "country_of_incorporation": "Canada",
+          "legal_name": "Summit Ridge Ventures Inc",
+          "registered_address": "450 Bay Street, Suite 2300, Toronto",
+          "source_of_funds": "shareholder_capital"
+        },
+        "output": {
+          "accreditation_status": "accredited",
+          "address": "450 Bay Street, Suite 2300, Toronto",
+          "contact_email": "investor.relations@summitridgevc.com",
+          "country": "Canada",
+          "created_at": "2025-10-01T00:00:00",
+          "date_of_incorporation": null,
+          "investor_id": "176",
+          "name": "Summit Ridge Ventures Inc",
+          "registration_number": null,
+          "source_of_funds": "shareholder_capital",
+          "status": "onboarded",
+          "tax_id": null
+        }
+      },
+      {
+        "name": "generate_new_audit_trail",
+        "arguments": {
+          "action": "create",
+          "reference_id": "176",
+          "reference_type": "investor"
+        },
+        "output": {
+          "action": "create",
+          "audit_trail_id": "3501",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": null,
+          "new_value": null,
+          "old_value": null,
+          "reference_id": "176",
+          "reference_type": "investor"
+        }
+      },
+      {
+        "name": "get_fund_entities",
+        "arguments": {
+          "entity_type": "funds",
+          "filters": {
+            "name": "Rogers-Hobbs Strategic Fund"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "funds",
+          "results": [
+            {
+              "created_at": "2023-07-11T22:30:36",
+              "fund_id": "18",
+              "fund_type": "money_market_funds",
+              "manager_id": "107",
+              "name": "Rogers-Hobbs Strategic Fund",
+              "size": 395579674.09,
+              "status": "open",
+              "updated_at": "2024-06-29T02:43:11"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "authorization_check",
+        "arguments": {
+          "action": "subscription_management",
+          "requester_email": "richard.bass@yahoo.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "message": "Role 'fund_manager' is directly authorized for action 'subscription_management'"
+        }
+      },
+      {
+        "name": "process_subscription",
+        "arguments": {
+          "action": "create",
+          "subscription_data": {
+            "fund_id": "18",
+            "investor_id": "176",
+            "amount": 1415926.75,
+            "request_assigned_to": "114",
+            "request_date": "2025-10-15",
+            "fund_manager_approval": true,
+            "compliance_officer_approval": true
+          }
+        },
+        "output": {
+          "action": "create",
+          "message": "Subscription 2501 created successfully.",
+          "subscription_data": {
+            "amount": 1415926.75,
+            "approval_date": null,
+            "fund_id": "18",
+            "investor_id": "176",
+            "request_assigned_to": "114",
+            "request_date": "2025-10-15",
+            "status": "pending",
+            "subscription_id": "2501",
+            "updated_at": "2025-10-01T00:00:00"
+          },
+          "subscription_id": "2501",
+          "success": true
+        }
+      },
+      {
+        "name": "generate_new_audit_trail",
+        "arguments": {
+          "action": "create",
+          "reference_id": "2501",
+          "reference_type": "subscription"
+        },
+        "output": {
+          "action": "create",
+          "audit_trail_id": "3502",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": null,
+          "new_value": null,
+          "old_value": null,
+          "reference_id": "2501",
+          "reference_type": "subscription"
+        }
+      }
+    ],
+    "outputs": ["2501", "176", "114"],
+    "edges": [
+      {
+        "from": "instruction",
+        "to": "get_user_entities",
+        "connection": {
+          "output": "entity_type, email, role",
+          "input": "entity_type, filters.email, filters.role"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "authorization_check",
+        "connection": {
+          "output": "action, email",
+          "input": "action, requester_email"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "generate_investor",
+        "connection": {
+          "output": "accreditation_status, contact_email, country_of_incorporation, legal_name, registered_address, source_of_funds",
+          "input": "accreditation_status, contact_email, country_of_incorporation, legal_name, registered_address, source_of_funds"
+        }
+      },
+      {
+        "from": "authorization_check",
+        "to": "generate_investor",
+        "connection": {
+          "output": "approval_valid",
+          "input": "compliance_officer_approval"
+        }
+      },
+      {
+        "from": "generate_investor",
+        "to": "generate_new_audit_trail",
+        "connection": {
+          "output": "investor_id",
+          "input": "reference_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "generate_new_audit_trail",
+        "connection": {
+          "output": "action, reference_type",
+          "input": "action, reference_type"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "get_fund_entities",
+        "connection": {
+          "output": "entity_type, name",
+          "input": "entity_type, filters.name"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "process_subscription",
+        "connection": {
+          "output": "action, amount, request_date, fund_manager_approval",
+          "input": "action, subscription_data.amount, subscription_data.request_date, subscription_data.fund_manager_approval"
+        }
+      },
+      {
+        "from": "authorization_check",
+        "to": "process_subscription",
+        "connection": {
+          "output": "approval_valid",
+          "input": "subscription_data.compliance_officer_approval"
+        }
+      },
+      {
+        "from": "get_fund_entities",
+        "to": "process_subscription",
+        "connection": {
+          "output": "results[0].fund_id",
+          "input": "subscription_data.fund_id"
+        }
+      },
+      {
+        "from": "generate_investor",
+        "to": "process_subscription",
+        "connection": {
+          "output": "investor_id",
+          "input": "subscription_data.investor_id"
+        }
+      },
+      {
+        "from": "get_user_entities",
+        "to": "process_subscription",
+        "connection": {
+          "output": "results[0].user_id",
+          "input": "subscription_data.request_assigned_to"
+        }
+      },
+      {
+        "from": "process_subscription",
+        "to": "generate_new_audit_trail",
+        "connection": {
+          "output": "subscription_id",
+          "input": "reference_id"
+        }
+      }
+    ],
+    "num_edges": 13
+  }
+}
