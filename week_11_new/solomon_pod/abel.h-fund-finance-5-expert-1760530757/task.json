@@ -6,7 +6,7 @@
   "temperature": 1,
   "interface_num": 5,
   "task": {
-    "user_id": "15",
+    "user_id": "107",
     "instruction": "You are James Williams (jameswilliams659@gmail.com), a fund manager. The investor 'Sweeney Ltd' would like to add 6535.89 units of the mutual fund 'Green-Wright Growth Fund' to their portfolio at USD 122.158 per unit. Notify the fund manager of this transaction.",
     "actions": [
       {
@@ -246,7 +246,7 @@
         }
       }
     ],
-    "output": ["120", "60", "43"],
+    "output": ["107", "60", "43"],
     "edges": [
       {
         "from": "instruction",
