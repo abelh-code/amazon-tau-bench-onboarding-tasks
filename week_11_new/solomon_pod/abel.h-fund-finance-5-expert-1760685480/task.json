@@ -7,7 +7,7 @@
   "interface_num": 5,
   "task": {
     "user_id": "123",
-    "instruction": "You are Jennifer Cruz (jennifercruz286@gmail.com), a fund manager. You want to perform a fund switch for the investor Curry-Ward. in the 'Harrington Ltd Value Fund' to 'Burns, Hernandez and Ryan Balanced Fund'. Notify the investor of this transaction. You have been granted the permission to perform this operation from a compliance officer.",
+    "instruction": "You are Jennifer Cruz (jennifercruz286@gmail.com), a fund manager. You want to transfer 10 percent of Curry-Ward's subscription in the 'Harrington Ltd Value Fund' to 'Burns, Hernandez and Ryan Balanced Fund'. Notify the investor of the update in their subscription. You have been granted the permission to perform this operation from a compliance officer.",
     "actions": [
       {
         "name": "get_user_entities",
