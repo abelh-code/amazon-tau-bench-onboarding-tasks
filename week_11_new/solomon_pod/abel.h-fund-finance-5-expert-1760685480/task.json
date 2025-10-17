@@ -1,0 +1,468 @@
+{
+  "env": "fund_finance",
+  "model_provider": "fireworks",
+  "model": "qwen3-coder-480b-a35b-instruct",
+  "num_trials": 3,
+  "temperature": 1,
+  "interface_num": 5,
+  "task": {
+    "user_id": "123",
+    "instruction": "You are Jennifer Cruz (jennifercruz286@gmail.com), a fund manager. You want to transfer 10 percent of Curry-Ward's subscription in the 'Harrington Ltd Value Fund' to 'Burns, Hernandez and Ryan Balanced Fund'. Notify the investor of the update in their subscription. You have been granted the permission to perform this operation from a compliance officer.",
+    "actions": [
+      {
+        "name": "get_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "jennifercruz286@gmail.com",
+            "role": "fund_manager"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2024-04-28T23:22:53",
+              "email": "jennifercruz286@gmail.com",
+              "first_name": "Jennifer",
+              "last_name": "Cruz",
+              "role": "fund_manager",
+              "status": "active",
+              "timezone": "America/Los_Angeles",
+              "updated_at": "2024-11-04T11:34:51",
+              "user_id": "123"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "authorization_check",
+        "arguments": {
+          "action": "subscription_management",
+          "requester_email": "jennifercruz286@gmail.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "message": "Role 'fund_manager' is directly authorized for action 'subscription_management'"
+        }
+      },
+      {
+        "name": "get_investor_entities",
+        "arguments": {
+          "entity_type": "investors",
+          "filters": {
+            "name": "Curry-Ward"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "investors",
+          "results": [
+            {
+              "accreditation_status": "accredited",
+              "address": "1681 Ruiz Crossing Suite 586, Lake Jason, AR 14827",
+              "contact_email": "curryward4948@yahoo.com",
+              "country": "Germany",
+              "created_at": "2022-10-11T02:10:35",
+              "date_of_incorporation": "2021-10-08",
+              "investor_id": "162",
+              "name": "Curry-Ward",
+              "registration_number": 100093584,
+              "source_of_funds": "royalty_or_licensing_income",
+              "status": "onboarded",
+              "tax_id": "981-79-4695"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "get_fund_entities",
+        "arguments": {
+          "entity_type": "funds",
+          "filters": {
+            "name": "Harrington Ltd Value Fund"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "funds",
+          "results": [
+            {
+              "created_at": "2023-07-31T10:51:03",
+              "fund_id": "21",
+              "fund_type": "exchange_traded_funds",
+              "manager_id": "108",
+              "name": "Harrington Ltd Value Fund",
+              "size": 106301572.46,
+              "status": "open",
+              "updated_at": "2024-12-17T10:24:54"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "get_fund_entities",
+        "arguments": {
+          "entity_type": "funds",
+          "filters": {
+            "name": "Burns, Hernandez and Ryan Balanced Fund"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "funds",
+          "results": [
+            {
+              "created_at": "2025-02-13T21:52:01",
+              "fund_id": "89",
+              "fund_type": "real_estate_investment_trusts",
+              "manager_id": "108",
+              "name": "Burns, Hernandez and Ryan Balanced Fund",
+              "size": 204739632.04,
+              "status": "open",
+              "updated_at": "2025-06-06T12:30:20"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "get_investment_flow_entities",
+        "arguments": {
+          "entity_type": "subscriptions",
+          "filters": {
+            "fund_id": "89",
+            "investor_id": "162"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "subscriptions",
+          "results": [
+            {
+              "amount": 2133313.71,
+              "approval_date": null,
+              "fund_id": "89",
+              "investor_id": "162",
+              "request_assigned_to": "24",
+              "request_date": "2024-07-04",
+              "status": "pending",
+              "subscription_id": "241",
+              "updated_at": "2025-04-09T19:39:01"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "get_investment_flow_entities",
+        "arguments": {
+          "entity_type": "subscriptions",
+          "filters": {
+            "fund_id": "21",
+            "investor_id": "162"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "subscriptions",
+          "results": [
+            {
+              "amount": 3736386.66,
+              "approval_date": "2025-07-10",
+              "fund_id": "21",
+              "investor_id": "162",
+              "request_assigned_to": "79",
+              "request_date": "2025-06-09",
+              "status": "approved",
+              "subscription_id": "530",
+              "updated_at": "2025-07-20T23:54:37"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "process_subscription",
+        "arguments": {
+          "action": "update",
+          "subscription_data": {
+            "amount": 2506952.376,
+            "fund_manager_approval": true,
+            "compliance_officer_approval": true
+          },
+          "subscription_id": "241"
+        },
+        "output": {
+          "action": "update",
+          "message": "Subscription 241 updated successfully.",
+          "subscription_data": {
+            "amount": 2506952.376,
+            "approval_date": null,
+            "fund_id": "89",
+            "investor_id": "162",
+            "request_assigned_to": "24",
+            "request_date": "2024-07-04",
+            "status": "pending",
+            "subscription_id": "241",
+            "updated_at": "2025-10-01T00:00:00"
+          },
+          "subscription_id": "241",
+          "success": true
+        }
+      },
+      {
+        "name": "process_subscription",
+        "arguments": {
+          "action": "update",
+          "subscription_data": {
+            "amount": 3362747.994,
+            "fund_manager_approval": true,
+            "compliance_officer_approval": true
+          },
+          "subscription_id": "530"
+        },
+        "output": {
+          "action": "update",
+          "message": "Subscription 530 updated successfully.",
+          "subscription_data": {
+            "amount": 3362747.994,
+            "approval_date": "2025-07-10",
+            "fund_id": "21",
+            "investor_id": "162",
+            "request_assigned_to": "79",
+            "request_date": "2025-06-09",
+            "status": "approved",
+            "subscription_id": "530",
+            "updated_at": "2025-10-01T00:00:00"
+          },
+          "subscription_id": "530",
+          "success": true
+        }
+      },
+      {
+        "name": "process_notifications",
+        "arguments": {
+          "action": "create",
+          "notification_data": {
+            "email": "curryward4948@yahoo.com",
+            "type": "subscription_update",
+            "class": "subscriptions"
+          }
+        },
+        "output": {
+          "action": "create",
+          "message": "Notification 1502 created successfully for curryward4948@yahoo.com",
+          "notification_data": {
+            "class": "subscriptions",
+            "created_at": "2025-10-01T12:00:00",
+            "email": "curryward4948@yahoo.com",
+            "notification_id": "1502",
+            "reference_id": null,
+            "sent_at": null,
+            "status": "pending",
+            "type": "subscription_update"
+          },
+          "notification_id": "1502",
+          "success": true
+        }
+      },
+      {
+        "name": "generate_new_audit_trail",
+        "arguments": {
+          "action": "update",
+          "field_name": "amount",
+          "new_value": "2506952.376",
+          "old_value": "2133313.71",
+          "reference_id": "241",
+          "reference_type": "subscription"
+        },
+        "output": {
+          "action": "update",
+          "audit_trail_id": "3501",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": "amount",
+          "new_value": "2506952.376",
+          "old_value": "2133313.71",
+          "reference_id": "241",
+          "reference_type": "subscription"
+        }
+      },
+      {
+        "name": "generate_new_audit_trail",
+        "arguments": {
+          "action": "update",
+          "field_name": "amount",
+          "new_value": "3362747.994",
+          "old_value": "3736386.66",
+          "reference_id": "530",
+          "reference_type": "subscription"
+        },
+        "output": {
+          "action": "update",
+          "audit_trail_id": "3502",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": "amount",
+          "new_value": "3362747.994",
+          "old_value": "3736386.66",
+          "reference_id": "530",
+          "reference_type": "subscription"
+        }
+      },
+      {
+        "name": "generate_new_audit_trail",
+        "arguments": {
+          "action": "create",
+          "reference_id": "1502",
+          "reference_type": "notification"
+        },
+        "output": {
+          "action": "create",
+          "audit_trail_id": "3503",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": null,
+          "new_value": null,
+          "old_value": null,
+          "reference_id": "1502",
+          "reference_type": "notification"
+        }
+      }
+    ],
+    "outputs": ["123", "162"],
+    "edges": [
+      {
+        "from": "instruction",
+        "to": "get_user_entities",
+        "connection": {
+          "output": "entity_type, email, role",
+          "input": "entity_type, filters.email, filters.role"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "authorization_check",
+        "connection": {
+          "output": "action, email",
+          "input": "action, requester_email"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "get_investor_entities",
+        "connection": {
+          "output": "entity_type, name",
+          "input": "entity_type, filters.name"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "get_fund_entities",
+        "connection": {
+          "output": "entity_type, name",
+          "input": "entity_type, filters.name"
+        }
+      },
+      {
+        "from": "get_fund_entities",
+        "to": "get_investment_flow_entities",
+        "connection": {
+          "output": "results[0].fund_id",
+          "input": "filters.fund_id"
+        }
+      },
+      {
+        "from": "get_investor_entities",
+        "to": "get_investment_flow_entities",
+        "connection": {
+          "output": "results[0].investor_id",
+          "input": "filters.investor_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "get_investment_flow_entities",
+        "connection": {
+          "output": "entity_type",
+          "input": "entity_type"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "process_subscription",
+        "connection": {
+          "output": "action, amount, compliance_officer_approval",
+          "input": "action, subscription_data.amount, subscription_data.compliance_officer_approval"
+        }
+      },
+      {
+        "from": "authorization_check",
+        "to": "process_subscription",
+        "connection": {
+          "output": "approval_valid",
+          "input": "subscription_data.fund_manager_approval"
+        }
+      },
+      {
+        "from": "get_investment_flow_entities",
+        "to": "process_subscription",
+        "connection": {
+          "output": "results[0].subscription_id",
+          "input": "subscription_id"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "generate_new_audit_trail",
+        "connection": {
+          "output": "action, field_name, reference_type",
+          "input": "action, field_name, reference_type"
+        }
+      },
+      {
+        "from": "process_subscription",
+        "to": "generate_new_audit_trail",
+        "connection": {
+          "output": "subscription_data.amount, subscription_id",
+          "input": "new_value, reference_id"
+        }
+      },
+      {
+        "from": "get_investment_flow_entities",
+        "to": "generate_new_audit_trail",
+        "connection": {
+          "output": "results[0].amount",
+          "input": "old_value"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "process_notifications",
+        "connection": {
+          "output": "action, type, class",
+          "input": "action, notification_data.type, notification_data.class"
+        }
+      },
+      {
+        "from": "get_investor_entities",
+        "to": "process_notifications",
+        "connection": {
+          "output": "results[0].contact_email",
+          "input": "notification_data.email"
+        }
+      },
+      {
+        "from": "process_notifications",
+        "to": "generate_new_audit_trail",
+        "connection": {
+          "output": "notification_id",
+          "input": "reference_id"
+        }
+      }
+    ],
+    "num_edges": 16
+  }
+}
