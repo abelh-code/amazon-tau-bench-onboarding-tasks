@@ -1,0 +1,300 @@
+{
+  "env": "fund_finance",
+  "model_provider": "fireworks",
+  "model": "qwen3-coder-480b-a35b-instruct",
+  "num_trials": 3,
+  "temperature": 1,
+  "interface_num": 5,
+  "task": {
+    "user_id": "111",
+    "instruction": "You are William Estrada (william.estrada@investment.com), a fund manager. You want to update the type of 'Zimmerman-Graham Strategic Fund' from 'multi_asset_funds' to 'hedge_funds'. Once you do this, notify the manager of this update. ",
+    "actions": [
+      {
+        "name": "get_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "email": "william.estrada@investment.com",
+            "role": "fund_manager"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2024-01-05T20:13:22",
+              "email": "william.estrada@investment.com",
+              "first_name": "William",
+              "last_name": "Estrada",
+              "role": "fund_manager",
+              "status": "active",
+              "timezone": "America/New_York",
+              "updated_at": "2024-11-13T09:30:34",
+              "user_id": "111"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "authorization_check",
+        "arguments": {
+          "action": "fund_management_maintenance",
+          "requester_email": "william.estrada@investment.com"
+        },
+        "output": {
+          "approval_valid": true,
+          "message": "Role 'fund_manager' is directly authorized for action 'fund_management_maintenance'"
+        }
+      },
+      {
+        "name": "get_fund_entities",
+        "arguments": {
+          "entity_type": "funds",
+          "filters": {
+            "name": "Zimmerman-Graham Strategic Fund"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "funds",
+          "results": [
+            {
+              "created_at": "2024-03-01T18:35:29",
+              "fund_id": "32",
+              "fund_type": "multi_asset_funds",
+              "manager_id": "4",
+              "name": "Zimmerman-Graham Strategic Fund",
+              "size": 499786636.02,
+              "status": "open",
+              "updated_at": "2025-07-08T10:45:23"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "process_fund",
+        "arguments": {
+          "action": "update",
+          "fund_data": {
+            "fund_manager_approval": true,
+            "compliance_officer_approval": true,
+            "fund_type": "hedge_funds"
+          },
+          "fund_id": "32"
+        },
+        "output": {
+          "action": "update",
+          "fund_data": {
+            "created_at": "2024-03-01T18:35:29",
+            "fund_id": "32",
+            "fund_type": "hedge_funds",
+            "manager_id": "4",
+            "name": "Zimmerman-Graham Strategic Fund",
+            "size": 499786636.02,
+            "status": "open",
+            "updated_at": "2025-10-01T12:00:00"
+          },
+          "fund_id": "32",
+          "message": "Fund 32 updated successfully",
+          "success": true
+        }
+      },
+      {
+        "name": "generate_new_audit_trail",
+        "arguments": {
+          "action": "update",
+          "field_name": "fund_type",
+          "new_value": "hedge_funds",
+          "old_value": "multi_asset_funds",
+          "reference_id": "32",
+          "reference_type": "fund"
+        },
+        "output": {
+          "action": "update",
+          "audit_trail_id": "3501",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": "fund_type",
+          "new_value": "hedge_funds",
+          "old_value": "multi_asset_funds",
+          "reference_id": "32",
+          "reference_type": "fund"
+        }
+      },
+      {
+        "name": "get_user_entities",
+        "arguments": {
+          "entity_type": "users",
+          "filters": {
+            "user_id": "4"
+          }
+        },
+        "output": {
+          "count": 1,
+          "entity_type": "users",
+          "results": [
+            {
+              "created_at": "2024-10-10T04:15:12",
+              "email": "anthonyrobinson734@outlook.com",
+              "first_name": "Anthony",
+              "last_name": "Robinson",
+              "role": "fund_manager",
+              "status": "active",
+              "timezone": "America/Los_Angeles",
+              "updated_at": "2025-05-31T23:28:28",
+              "user_id": "4"
+            }
+          ],
+          "success": true
+        }
+      },
+      {
+        "name": "process_notifications",
+        "arguments": {
+          "action": "create",
+          "notification_data": {
+            "email": "anthonyrobinson734@outlook.com",
+            "type": "alert",
+            "class": "funds"
+          }
+        },
+        "output": {
+          "action": "create",
+          "message": "Notification 1501 created successfully for anthonyrobinson734@outlook.com",
+          "notification_data": {
+            "class": "funds",
+            "created_at": "2025-10-01T12:00:00",
+            "email": "anthonyrobinson734@outlook.com",
+            "notification_id": "1501",
+            "reference_id": null,
+            "sent_at": null,
+            "status": "pending",
+            "type": "alert"
+          },
+          "notification_id": "1501",
+          "success": true
+        }
+      },
+      {
+        "name": "generate_new_audit_trail",
+        "arguments": {
+          "action": "create",
+          "reference_id": "1501",
+          "reference_type": "notification"
+        },
+        "output": {
+          "action": "create",
+          "audit_trail_id": "3502",
+          "created_at": "2025-10-01T00:00:00",
+          "field_name": null,
+          "new_value": null,
+          "old_value": null,
+          "reference_id": "1501",
+          "reference_type": "notification"
+        }
+      }
+    ],
+    "outputs": [],
+    "edges": [
+      {
+        "from": "instruction",
+        "to": "get_user_entities",
+        "connection": {
+          "output": "entity_type, email, role",
+          "input": "entity_type, filters.email, filters.role"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "authorization_check",
+        "connection": {
+          "output": "action, email",
+          "input": "action, requester_email"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "get_fund_entities",
+        "connection": {
+          "output": "entity_type, name",
+          "input": "entity_type, filters.name"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "process_fund",
+        "connection": {
+          "output": "action, fund_type, compliance_officer_approval",
+          "input": "action, fund_data.fund_type, fund_data.compliance_officer_approval"
+        }
+      },
+      {
+        "from": "get_fund_entities",
+        "to": "process_fund",
+        "connection": {
+          "output": "results[0].fund_id",
+          "input": "fund_id"
+        }
+      },
+      {
+        "from": "authorization_check",
+        "to": "process_fund",
+        "connection": {
+          "output": "approval_valid, approval_valid",
+          "input": "fund_data.fund_manager_approval, fund_data.compliance_officer_approval"
+        }
+      },
+      {
+        "from": "process_fund",
+        "to": "generate_new_audit_trail",
+        "connection": {
+          "output": "fund_data.fund_type, fund_id",
+          "input": "new_value, reference_id"
+        }
+      },
+      {
+        "from": "get_fund_entities",
+        "to": "generate_new_audit_trail",
+        "connection": {
+          "output": "results[0].fund_type",
+          "input": "old_value"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "generate_new_audit_trail",
+        "connection": {
+          "output": "action, field_name, reference_type",
+          "input": "action, field_name, reference_type"
+        }
+      },
+      {
+        "from": "process_fund",
+        "to": "get_user_entities",
+        "connection": {
+          "output": "fund_data.manager_id",
+          "input": "filters.user_id"
+        }
+      },
+      {
+        "from": "get_user_entities",
+        "to": "process_notifications",
+        "connection": {
+          "output": "results[0].email",
+          "input": "notification_data.email"
+        }
+      },
+      {
+        "from": "instruction",
+        "to": "process_notifications",
+        "connection": {
+          "output": "action, type, class",
+          "input": "action, notification_data.type, notification_data.class"
+        }
+      }
+    ],
+    "num_edges": 13
+  }
+}
