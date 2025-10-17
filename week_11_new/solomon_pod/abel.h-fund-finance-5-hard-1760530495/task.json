@@ -7,7 +7,7 @@
   "interface_num": 5,
   "task": {
     "user_id": "114",
-    "instruction": "You are Richard Bass (richard.bass@yahoo.com), a fund manager. You are working with Jerry Robinson (jerryrobinson272@hotmail.com), a complicance officer. You want to onboard a newly accredited investor 'Summit Ridge Ventures Inc' in 450 Bay Street, Suite 2300, Toronto, Canada with contact email investor.relations@summitridgevc.com and a source of funds through shareholder capital today, October 14, 2025. They would like to subscribe USD 1415926.75 to 'Rogers-Hobbs Strategic Fund' on the same day of their onboarding. Perform this subscription request for them. Your compliance officer has provided the necessary authorization to perform these operations.",
+    "instruction": "You are Richard Bass (richard.bass@yahoo.com), a fund manager. You are working with Jerry Robinson (jerryrobinson272@hotmail.com), a compliance officer. You want to onboard a newly accredited investor 'Summit Ridge Ventures Inc' in 450 Bay Street, Suite 2300, Toronto, Canada with contact email investor.relations@summitridgevc.com and a source of funds through shareholder capital today, October 14, 2025. They would like to subscribe USD 1415926.75 to 'Rogers-Hobbs Strategic Fund' on the same day of their onboarding. Perform this subscription request for them. Your compliance officer has provided the necessary authorization to perform these operations.",
     "actions": [
       {
         "name": "get_user_entities",
@@ -32,34 +32,6 @@
               "timezone": "America/Chicago",
               "updated_at": "2024-07-12T00:58:52",
               "user_id": "114"
-            }
-          ],
-          "success": true
-        }
-      },
-      {
-        "name": "get_user_entities",
-        "arguments": {
-          "entity_type": "users",
-          "filters": {
-            "email": "jerryrobinson272@hotmail.com",
-            "role": "compliance_officer"
-          }
-        },
-        "output": {
-          "count": 1,
-          "entity_type": "users",
-          "results": [
-            {
-              "created_at": "2022-12-05T10:03:24",
-              "email": "jerryrobinson272@hotmail.com",
-              "first_name": "Jerry",
-              "last_name": "Robinson",
-              "role": "compliance_officer",
-              "status": "active",
-              "timezone": "America/Los_Angeles",
-              "updated_at": "2025-08-11T19:16:49",
-              "user_id": "47"
             }
           ],
           "success": true
@@ -270,8 +242,8 @@
         "from": "instruction",
         "to": "process_subscription",
         "connection": {
-          "output": "action, amount, request_date, fund_manager_approval",
-          "input": "action, subscription_data.amount, subscription_data.request_date, subscription_data.fund_manager_approval"
+          "output": "action, amount, request_date, compliance_officer_approval",
+          "input": "action, subscription_data.amount, subscription_data.request_date, subscription_data.compliance_officer_approval"
         }
       },
       {
@@ -279,7 +251,7 @@
         "to": "process_subscription",
         "connection": {
           "output": "approval_valid",
-          "input": "subscription_data.compliance_officer_approval"
+          "input": "subscription_data.fund_manager_approval"
         }
       },
       {
